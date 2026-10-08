@@ -9,11 +9,11 @@
 <link rel="canonical" href="https://unwakingart.github.io/workshops/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Beginner Oil Painting Portrait · unwakingart">
-<meta property="og:description" content="A three-hour beginner oil painting workshop in Makati, Nov 7 and 8, 2026. Six seats each day.">
+<meta property="og:description" content="A three-hour beginner oil painting workshop in Makati, Nov 7, 8 and 28, 2026. Six seats each day.">
 <meta property="og:image" content="https://unwakingart.github.io/workshops/images/preview.png">
 <meta property="og:url" content="https://unwakingart.github.io/workshops/">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="description" content="Paint your first oil portrait in a three-hour beginner workshop in Makati, Nov 7 and 8, 2026. All materials provided, no experience needed.">
+<meta name="description" content="Paint your first oil portrait in a three-hour beginner workshop in Makati, Nov 7, 8 and 28, 2026. All materials provided, no experience needed.">
 <link rel="stylesheet" href="brand/site.css">
 <style>
   /* Additions for the workshop page; everything else comes from brand/site.css (the Hanoi cohort page's look). */
@@ -47,11 +47,11 @@
   .app-closed { text-align: center; padding: 10px 0 4px; }
   .app-closed h3 { font-size: 18px; margin-bottom: 6px; }
 </style>
-<script>(function(){var v="20261009071759";fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})})();</script>
+<script>(function(){var v="20261009072023";fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})})();</script>
 </head>
 <body>
 
-<div class="ann">Beginner oil painting workshop in Makati · Nov 7 &amp; 8 · now open for registration</div>
+<div class="ann">Beginner oil painting workshop in Makati · Nov 7, 8 &amp; 28 · now open for registration</div>
 
 <main class="wrap">
 
@@ -72,7 +72,7 @@
       <div class="h-stage">
         <div class="h-print"><img src="images/fabiola.jpg" alt="A painted portrait of a young woman in profile, wearing a red veil against a dark background"></div>
         <div class="h-note"><p class="h-note-title">[ Oil Painting Portrait ]</p>
-          <dl><dt>Dates</dt><dd id="hero-dates">Sat Nov 7 or Sun Nov 8, 2026</dd><dt>Time</dt><dd>11:30am to 2:30pm</dd><dt>Location</dt><dd>Makati</dd><dt>Fee</dt><dd>₱2,000 early bird<br>₱2,200 regular</dd><dt>Seats</dt><dd>6 each day</dd></dl>
+          <dl><dt>Dates</dt><dd id="hero-dates">Nov 7, 8 &amp; 28, 2026</dd><dt>Time</dt><dd>11:30am to 2:30pm</dd><dt>Location</dt><dd>Makati</dd><dt>Fee</dt><dd>₱2,000 early bird<br>₱2,200 regular</dd><dt>Seats</dt><dd>6 each day</dd></dl>
         </div>
       </div>
     </div>
@@ -187,7 +187,7 @@
         <span class="app-sticky" id="reg-sticky" hidden>Early bird until<b></b></span>
         <p class="app-head"><span>Workshop Registration</span></p>
         <form id="app-form" action="https://api.web3forms.com/submit" method="POST">
-          <input type="hidden" name="access_key" value="WEB3FORMS_KEY">
+          <input type="hidden" name="access_key" value="217f6bbc-8284-4ac8-b96b-c2824f2a5d68">
           <input type="hidden" name="subject" value="New registration: Beginner Oil Painting Portrait">
           <input type="hidden" name="from_name" value="Workshop registration">
           <input type="checkbox" name="botcheck" class="app-hp" tabindex="-1" autocomplete="off">
@@ -266,7 +266,7 @@ Here's my payment receipt.</div>
   <!-- 6. Closing -->
   <section class="end">
     <p class="end-line"><mark>Paint your first oil portrait.</mark></p>
-    <p class="end-sub">Makati · Nov 7 &amp; 8, 2026 · six seats each day</p>
+    <p class="end-sub">Makati · Nov 7, 8 &amp; 28, 2026 · six seats each day</p>
     <a class="button end-cta" href="#register" data-goatcounter-click="register-bottom" data-goatcounter-title="Register (bottom)">Register</a>
     <div class="end-foot">
       <div class="end-brand">unwakingart</div>
@@ -329,7 +329,8 @@ Here's my payment receipt.</div>
 (function () {
   var WORKSHOPS = [
     { date: '2026-11-07', venue: 'Cafe Seventy Six', area: 'Legazpi Village, Makati' },
-    { date: '2026-11-08', venue: 'Kind Cookie Cafe', area: 'Salcedo Village, Makati', earlyBird: '2026-10-31' }   // same weekend, same early-bird date
+    { date: '2026-11-08', venue: 'Kind Cookie Cafe', area: 'Salcedo Village, Makati', earlyBird: '2026-10-31' },  // same weekend, same early-bird date
+    { date: '2026-11-28', venue: 'Kind Cookie Cafe', area: 'Salcedo Village, Makati' }
   ];
   var SEATS = 6, START = '11:30', TIME = '11:30am to 2:30pm';
   var FEE = { early: 2000, regular: 2200, walkin: 2400 };
@@ -366,7 +367,7 @@ Here's my payment receipt.</div>
   // One torn note per date, and one choice per date in the form
   notes.innerHTML = open.map(function (w, i) {
     return '<div class="glance note ' + (i % 2 ? 'two' : 'one') + '">' +
-      '<p class="note-title">[ ' + esc(w.weekday) + ' · ' + esc(w.venue) + ' ]</p>' +
+      '<p class="note-title">[ ' + esc(w.label) + ' · ' + esc(w.venue) + ' ]</p>' +
       '<dl class="g-rows"><dt>Date</dt><dd>' + esc(w.full) + '</dd><dt>Time</dt><dd>' + TIME + '</dd>' +
       '<dt>Venue</dt><dd>' + esc(w.venue) + ', ' + esc(w.area) + '</dd><dt>Seats left</dt><dd data-seats="' + w.date + '"></dd></dl>' +
       '<div class="g-rule"></div><p class="g-head">Fee</p><div class="g-plan two">' +
@@ -379,7 +380,11 @@ Here's my payment receipt.</div>
       '<span>' + esc(w.label) + ' · ' + esc(w.venue) + '<small data-left="' + w.date + '"></small></span></label>';
   }).join('');
   var hero = document.getElementById('hero-dates');
-  if (hero && open.length) hero.textContent = open.length > 3 ? open.length + ' dates, from ' + open[0].label : open.map(function (w) { return w.label; }).join(' or ');
+  if (hero && open.length) {   // Nov 7, 8 & 28 · Dec 5
+    var months = [], byMonth = {};
+    open.forEach(function (w) { var q = parts(w.date), k = MO[q.m]; if (!byMonth[k]) { byMonth[k] = []; months.push(k); } byMonth[k].push(q.d); });
+    hero.textContent = months.map(function (k) { var d = byMonth[k]; return k + ' ' + (d.length > 1 ? d.slice(0, -1).join(', ') + ' & ' + d[d.length - 1] : d[0]); }).join(' · ') + ', ' + parts(open[open.length - 1].date).y;
+  }
 
   // The fee: early bird until a week before the chosen workshop, regular after that, walk-in on the day itself.
   function by(id) { return WORKSHOPS.filter(function (w) { return w.date === id; })[0]; }
