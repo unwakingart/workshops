@@ -45,6 +45,7 @@
   .pay-qr .qr-missing { aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #8B7355; padding: 20px; }
   .pay-qr .pay-save { font-size: 13px; font-weight: 400; margin: 0; }
   @media (min-width: 700px) { .pay-box { grid-template-columns: 1fr 230px; gap: 26px; padding: 20px 22px; align-items: center; } }
+  .dm-ex { display: block; border: 1px dashed rgba(74,55,40,0.5); padding: 9px 12px; margin: 8px 0 2px; font-size: 13px; line-height: 1.5; color: #4A3728; background: rgba(245,239,230,0.6); }
   .dm { border: 1px dashed rgba(74,55,40,0.5); padding: 14px 16px; margin: 14px 0 12px; white-space: pre-line; font-size: 14.5px; line-height: 1.5; }
   .dm-go { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
   .app .dm-go .button { margin-top: 0; }
@@ -52,7 +53,7 @@
   .app-closed { text-align: center; padding: 10px 0 4px; }
   .app-closed h3 { font-size: 18px; margin-bottom: 6px; }
 </style>
-<script>(function(){var v="20261009073832";fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})})();</script>
+<script>(function(){var v="20261009073935";fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})})();</script>
 </head>
 <body>
 
@@ -162,7 +163,7 @@
         <div class="steps">
           <div class="step"><div class="num">1</div><div class="what"><h3>Choose your day</h3><p>The days and cafés are under <a href="#tickets">Workshop fee</a>. It's the same workshop each day, in a small group.</p></div></div>
           <div class="step"><div class="num">2</div><div class="what"><h3>Pay the workshop fee</h3><p>Scan the QR code in the <a href="#register">registration form</a> with your banking app or e-wallet. The form shows the fee for the day you're paying: early bird until a week before your workshop, regular after that, and walk-in on the day itself.</p></div></div>
-          <div class="step"><div class="num">3</div><div class="what"><h3>Submit the form and send the screenshot</h3><p>Fill in your name, Instagram handle and payment reference number, then submit. Then message <a href="https://ig.me/m/unwakingart">@unwakingart on Instagram</a> with a screenshot of your payment receipt. Your registration isn't complete until I get the screenshot.</p><p>In your message, include your workshop day and the name or Instagram handle you registered with. After you submit, the form gives you this message ready to copy.</p></div></div>
+          <div class="step"><div class="num">3</div><div class="what"><h3>Submit the form and send the screenshot</h3><p>Fill in your name, Instagram handle and payment reference number, then submit. Then message <a href="https://ig.me/m/unwakingart">@unwakingart on Instagram</a> with a screenshot of your payment receipt. Your registration isn't complete until I get the screenshot.</p><p>In your message, include your workshop day and the name or Instagram handle you registered with. After you submit, the form gives you this message ready to copy.</p><p><span class="dm-ex"><b>Example:</b> Hi! I registered for the Beginner Oil Painting Portrait workshop.<br>Day: Sat, Nov 28<br>Name: Ana Reyes (@anareyes)<br>Here's my payment receipt.</span></p></div></div>
           <div class="step"><div class="num">4</div><div class="what"><h3>Get your confirmation</h3><p>I check every payment myself and message you on Instagram to confirm your seat. Your seat is yours once your payment is confirmed.</p></div></div>
           <div class="step"><div class="num">5</div><div class="what"><h3>See you at the café</h3><p>We start at 11:30am. Order your food and drink at the café when you arrive.</p></div></div>
         </div>
@@ -229,7 +230,7 @@
                   <li>Scan the QR code with your banking app or e-wallet. On your phone, save the QR code first, then upload it in your app's QR scanner.</li>
                   <li>Send the exact amount above.</li>
                   <li>Copy the reference number from your receipt into the box above, then submit this form.</li>
-                  <li>Send a screenshot of the receipt to <a href="https://ig.me/m/unwakingart">@unwakingart on Instagram</a>, with your workshop day and the name or Instagram handle you registered with.</li>
+                  <li>Send a screenshot of the receipt to <a href="https://ig.me/m/unwakingart">@unwakingart on Instagram</a>, with your workshop day and the name or Instagram handle you registered with.<span class="dm-ex"><b>Example:</b> Hi! I registered for the Beginner Oil Painting Portrait workshop.<br>Day: Sat, Nov 28<br>Name: Ana Reyes (@anareyes)<br>Here's my payment receipt.</span></li>
                 </ol>
               </div>
               <div class="pay-qr">
