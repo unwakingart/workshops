@@ -52,7 +52,7 @@
   .app-closed { text-align: center; padding: 10px 0 4px; }
   .app-closed h3 { font-size: 18px; margin-bottom: 6px; }
 </style>
-<script>(function(){var v="20261009072700";fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})})();</script>
+<script>(function(){var v="20261009072822";fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})})();</script>
 </head>
 <body>
 
@@ -212,6 +212,10 @@
             <label>Name<input type="text" name="Name" required autocomplete="name"></label>
             <label>Instagram handle<input type="text" name="Instagram" placeholder="@" required></label>
           </div>
+          <div class="app-row">
+            <label>Payment reference number<input type="text" name="Payment reference number" required></label>
+            <label>Name on the account you paid from<input type="text" name="Paid from account name" required></label>
+          </div>
 
           <div class="g-rule"></div>
           <fieldset>
@@ -224,7 +228,7 @@
                 <ol>
                   <li>Scan the QR code with your banking app or e-wallet. On your phone, save the QR code first, then upload it in your app's QR scanner.</li>
                   <li>Send the exact amount above.</li>
-                  <li>Copy the reference number from your receipt into the box below, then submit this form.</li>
+                  <li>Copy the reference number from your receipt into the box above, then submit this form.</li>
                   <li>Send a screenshot of the receipt to <a href="https://ig.me/m/unwakingart">@unwakingart on Instagram</a>, with your workshop day and the name or Instagram handle you registered with.</li>
                 </ol>
               </div>
@@ -234,10 +238,6 @@
               </div>
             </div>
             <input type="hidden" name="Amount due" id="pay-due" value="₱2,000 (early bird)">
-            <div class="app-row">
-              <label>Payment reference number<input type="text" name="Payment reference number" required></label>
-              <label>Name on the account you paid from<input type="text" name="Paid from account name" required></label>
-            </div>
           </fieldset>
 
           <div class="g-rule"></div>
@@ -431,14 +431,18 @@ Here's my payment receipt.</div>
   function fee() {
     var picked = form.querySelector('[name="Workshop day"]:checked');
     var w = picked ? by(picked.getAttribute('data-day')) : null;
-    if (!w) {   // nothing chosen yet: if every open date is at the same fee, show it; otherwise ask
+    var sameDate = true;
+    if (!w) {   // nothing chosen yet: if every available date is at the same fee, show it; otherwise ask
       var live = open.filter(function (x) { return x.left > 0; });
-      if (live.length && live.every(function (x) { return x.tier === live[0].tier && x.earlyLast === live[0].earlyLast; })) w = live[0];
-      else if (live.length && live.every(function (x) { return x.tier === live[0].tier && x.tier !== 'early'; })) w = live[0];
+      if (live.length && live.every(function (x) { return x.tier === live[0].tier; })) {
+        w = live[0];
+        sameDate = live.every(function (x) { return x.earlyLast === live[0].earlyLast; });
+      }
     }
     var tier = document.getElementById('pay-tier'), amt = document.getElementById('pay-amt'), next = document.getElementById('pay-next'), due = document.getElementById('pay-due');
     if (!w) { tier.textContent = 'Workshop fee'; amt.textContent = peso(FEE.early) + ' or ' + peso(FEE.regular); next.textContent = 'Choose your day above to see your fee.'; due.value = ''; note(); return; }
     if (w.tier === 'early') { tier.textContent = 'Early bird fee, until ' + short(w.earlyLast); next.textContent = 'Regular fee from ' + short(shift(w.earlyLast, 1)) + ': ' + peso(FEE.regular); }
+    if (w.tier === 'early' && !sameDate) { tier.textContent = 'Early bird fee'; next.textContent = 'Regular fee after the early-bird date for your day: ' + peso(FEE.regular); }
     if (w.tier === 'regular') { tier.textContent = 'Regular fee'; next.textContent = 'Walk-in fee on the day: ' + peso(FEE.walkin); }
     if (w.tier === 'walkin') { tier.textContent = 'Walk-in fee, on the day'; next.textContent = ''; }
     amt.textContent = peso(FEE[w.tier]);
