@@ -23,6 +23,11 @@
   @media (min-width: 700px) { .h-stage { min-height: 560px; } .h-note { top: 300px; } }
   @media (min-width: 900px) { .h-stage { min-height: 560px; } .h-note { top: 318px; } }
   .h-credit { font-size: 11.5px; color: #6B5744; margin: 14px 0 0; text-align: center; }
+  .date-filter { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin: 0 0 30px; }
+  .date-filter button { font: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 12px; cursor: pointer; background: #4A3728; color: #FDF8F0; border: 1px solid #4A3728; border-radius: 0; }
+  .date-filter button:hover { background: #6B4A2E; }
+  .date-filter button.on { background: #5C682E; color: #F3EAD3; border-color: #5C682E; }
+  .date-empty { text-align: center; margin: 0; }
   .seat-full { color: #8A3B2A; font-weight: 600; }
   .note.two .seat-full { color: #F3EAD3; }
   .app .app-pick.is-full { opacity: 0.55; cursor: default; }
@@ -47,7 +52,7 @@
   .app-closed { text-align: center; padding: 10px 0 4px; }
   .app-closed h3 { font-size: 18px; margin-bottom: 6px; }
 </style>
-<script>(function(){var v="20261009072449";fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})})();</script>
+<script>(function(){var v="20261009072700";fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})})();</script>
 </head>
 <body>
 
@@ -132,7 +137,13 @@
   <section id="tickets">
     <div class="g-wrap">
       <p class="g-title">[ Workshop fee ]</p>
+      <div class="date-filter" id="date-filter" role="tablist" aria-label="Which dates to show">
+        <button type="button" class="on" role="tab" aria-selected="true" data-show="open">Available</button>
+        <button type="button" role="tab" aria-selected="false" data-show="full" hidden>Full</button>
+        <button type="button" role="tab" aria-selected="false" data-show="past" hidden>Past</button>
+      </div>
       <div class="notes" id="date-notes"></div>
+      <p class="date-empty" id="date-empty" hidden>Every date is full. Message <a href="https://www.instagram.com/unwakingart/">@unwakingart on Instagram</a> to hear about the next one.</p>
     </div>
   </section>
 
@@ -366,29 +377,52 @@ Here's my payment receipt.</div>
   var btn = form.querySelector('.app-send'), sticky = document.getElementById('reg-sticky');
   var notes = document.getElementById('date-notes'), picks = document.getElementById('day-picks');
 
-  // One torn note per date, and one choice per date in the form
-  notes.innerHTML = open.map(function (w, i) {
+  // One torn note per date, shown under Available, Full or Past
+  var filter = 'open', filterBox = document.getElementById('date-filter'), empty = document.getElementById('date-empty');
+  function group(kind) {
+    return WORKSHOPS.filter(function (w) { return kind === 'past' ? w.started : !w.started && (kind === 'full' ? w.left === 0 : w.left > 0); });
+  }
+  function noteHtml(w, i, kind) {
     return '<div class="glance note ' + (i % 2 ? 'two' : 'one') + '">' +
       '<p class="note-title">[ ' + esc(w.label) + ' · ' + esc(w.venue) + ' ]</p>' +
       '<dl class="g-rows"><dt>Date</dt><dd>' + esc(w.full) + '</dd><dt>Time</dt><dd>' + TIME + '</dd>' +
-      '<dt>Venue</dt><dd>' + esc(w.venue) + ', ' + esc(w.area) + '</dd><dt>Seats left</dt><dd data-seats="' + w.date + '"></dd></dl>' +
+      '<dt>Venue</dt><dd>' + esc(w.venue) + ', ' + esc(w.area) + '</dd>' +
+      (kind === 'past' ? '' : '<dt>Seats left</dt><dd' + (kind === 'full' ? ' class="seat-full">Full' : '>' + w.left + ' of ' + w.seats) + '</dd>') + '</dl>' +
       '<div class="g-rule"></div><p class="g-head">Fee</p><div class="g-plan two">' +
       (w.isEarly ? '<span>Early bird, book by ' + short(w.earlyLast) + '</span><span>' + peso(FEE.early) + '</span>' : '') +
       '<span>Regular</span><span>' + peso(FEE.regular) + '</span><span>Walk-in, on the day</span><span>' + peso(FEE.walkin) + '</span></div>' +
-      '<div class="g-rule"></div><p class="g-head">Non-refundable, transferable</p></div>';
-  }).join('');
+      '<div class="g-rule"></div><p class="g-head">' + (kind === 'past' ? 'This workshop has taken place' : 'Non-refundable, transferable') + '</p></div>';
+  }
+  function draw() {
+    var counts = { open: group('open').length, full: group('full').length, past: group('past').length };
+    if (filter !== 'open' && !counts[filter]) filter = 'open';
+    [].slice.call(filterBox.querySelectorAll('button')).forEach(function (b) {
+      var k = b.getAttribute('data-show'), on = k === filter;
+      b.hidden = k !== 'open' && !counts[k];
+      b.classList.toggle('on', on); b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    filterBox.hidden = !counts.full && !counts.past;          // with only available dates there is nothing to switch
+    var list = group(filter);
+    notes.innerHTML = list.map(function (w, i) { return noteHtml(w, i, filter); }).join('');
+    empty.hidden = !!list.length;
+  }
+  filterBox.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    filter = b.getAttribute('data-show'); draw();
+  });
+
   picks.innerHTML = open.map(function (w, i) {
     return '<label class="app-pick"><input type="radio" name="Workshop day" value="' + esc(w.label + ', ' + w.venue) + '" data-day="' + w.date + '"' + (i ? '' : ' required') + '> ' +
       '<span>' + esc(w.label) + ' · ' + esc(w.venue) + '<small data-left="' + w.date + '"></small></span></label>';
   }).join('');
-  var hero = document.getElementById('hero-dates');
-  if (hero && open.length) {   // Nov 7, 8 & 28 · Dec 5
+  // The dates and seat counts in the written lines: only dates that can still be booked
+  function lines() {
+    var live = group('open'); if (!live.length) return;
     var months = [], byMonth = {};
-    open.forEach(function (w) { var q = parts(w.date), k = MO[q.m]; if (!byMonth[k]) { byMonth[k] = []; months.push(k); } byMonth[k].push(q.d); });
-    var datesText = months.map(function (k) { var d = byMonth[k]; return k + ' ' + (d.length > 1 ? d.slice(0, -1).join(', ') + ' & ' + d[d.length - 1] : d[0]); }).join(' · ') + ', ' + parts(open[open.length - 1].date).y;
-    hero.textContent = datesText;
-    [].slice.call(document.querySelectorAll('[data-dates]')).forEach(function (el) { el.textContent = el.getAttribute('data-dates') === 'short' ? datesText.replace(/, \d{4}$/, '') : datesText; });
-    var sizes = open.map(function (w) { return w.seats; }), lo = Math.min.apply(null, sizes), hi = Math.max.apply(null, sizes);
+    live.forEach(function (w) { var q = parts(w.date), k = MO[q.m]; if (!byMonth[k]) { byMonth[k] = []; months.push(k); } byMonth[k].push(q.d); });
+    var datesText = months.map(function (k) { var d = byMonth[k]; return k + ' ' + (d.length > 1 ? d.slice(0, -1).join(', ') + ' & ' + d[d.length - 1] : d[0]); }).join(' · ') + ', ' + parts(live[live.length - 1].date).y;
+    [].slice.call(document.querySelectorAll('[data-dates], #hero-dates')).forEach(function (el) { el.textContent = el.getAttribute('data-dates') === 'short' ? datesText.replace(/, \d{4}$/, '') : datesText; });
+    var sizes = live.map(function (w) { return w.seats; }), lo = Math.min.apply(null, sizes), hi = Math.max.apply(null, sizes);
     [].slice.call(document.querySelectorAll('[data-seats-range]')).forEach(function (el) { el.textContent = lo === hi ? String(lo) : lo + ' to ' + hi; });
   }
 
@@ -442,9 +476,6 @@ Here's my payment receipt.</div>
       if (isNaN(n)) n = w.seats;
       n = Math.max(0, Math.min(w.seats, n)); w.left = n;
       var full = n === 0;
-      [].slice.call(document.querySelectorAll('[data-seats="' + w.date + '"]')).forEach(function (el) {
-        el.textContent = full ? 'Full' : n + ' of ' + w.seats; el.classList.toggle('seat-full', full);
-      });
       [].slice.call(document.querySelectorAll('[data-left="' + w.date + '"]')).forEach(function (el) {
         el.textContent = full ? 'Full' : n + (n === 1 ? ' seat left' : ' seats left');
       });
@@ -455,12 +486,12 @@ Here's my payment receipt.</div>
     });
     var first = form.querySelector('[name="Workshop day"]:not(:disabled)');
     [].slice.call(form.querySelectorAll('[name="Workshop day"]')).forEach(function (r) { r.required = r === first; });
-    fee();
+    fee(); draw(); lines();
     if (!anyOpen) { form.hidden = true; closed.hidden = false; sticky.hidden = true; }
   }
+  // Wait for the seat counts before drawing, so full dates never flash as available
   var start = {}; open.forEach(function (w) { start[w.date] = w.seats; });
-  show(start);
-  fetch('seats.json?' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(show).catch(function () {});
+  fetch('seats.json?' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(show).catch(function () { show(start); });
 
   // Copy the Instagram message
   document.getElementById('dm-copy').addEventListener('click', function () {
