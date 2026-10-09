@@ -14,7 +14,7 @@
 <meta property="og:url" content="https://unwakingart.github.io/workshops/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="description" content="Paint your first oil portrait in a three-hour beginner workshop in Makati, in November 2026. All materials provided, no experience needed.">
-<link rel="stylesheet" href="brand/site.css?v=20261009082836">
+<link rel="stylesheet" href="brand/site.css?v=20261009083332">
 <style>
   /* Additions for the workshop page; everything else comes from brand/site.css (the Hanoi cohort page's look). */
   .h-print img { aspect-ratio: 4 / 5; object-position: 30% 30%; }
@@ -52,8 +52,13 @@
   .dm-copy { font: inherit; font-size: 12.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #4A3728; background: none; border: 1px solid #4A3728; border-radius: 30px; padding: 10px 22px; cursor: pointer; }
   .app-closed { text-align: center; padding: 10px 0 4px; }
   .app-closed h3 { font-size: 18px; margin-bottom: 6px; }
+  /* A pinned button on phones and tablets: it shows while no other button to the form, and not the form itself, is on screen. */
+  .pin-cta { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 40; transform: translate(-50%, 16px); opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; white-space: nowrap; text-decoration: none; font-size: 12.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; padding: 12px 28px; border-radius: 40px; background: #5C682E; color: #F3EAD3; border: 1px solid #4A3728; box-shadow: 3px 3px 0 #4A3728, 0 8px 18px rgba(60,40,20,0.28); }
+  .pin-cta.show { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
+  @media (min-width: 900px) { .pin-cta { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .pin-cta { transition: none; } }
 </style>
-<script>(function(){var v="20261009082836";function c(){fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})}c();document.addEventListener("visibilitychange",function(){if(!document.hidden)c()});window.addEventListener("pageshow",function(e){if(e.persisted)c()})})();</script>
+<script>(function(){var v="20261009083332";function c(){fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})}c();document.addEventListener("visibilitychange",function(){if(!document.hidden)c()});window.addEventListener("pageshow",function(e){if(e.persisted)c()})})();</script>
 </head>
 <body>
 
@@ -279,6 +284,8 @@ Here's my payment receipt.</div>
   </section>
 
 </main>
+
+<a class="pin-cta" id="pin-cta" href="#register" aria-hidden="true" tabindex="-1" data-goatcounter-click="register-pinned" data-goatcounter-title="Register now (pinned)">Register now</a>
 
 <script>
 /* The picture and its note are placed by hand, so their area has no natural height. Fit it to them, so no empty gap is left below. */
@@ -530,6 +537,27 @@ Here's my payment receipt.</div>
         msg.textContent = "Sorry, that didn't send. Please try again, or message @unwakingart on Instagram.";
       });
   });
+})();
+</script>
+<script>
+/* The pinned button: hidden at the top (the first button is there), while the form is on screen, near the closing button, and once the form is sent or closed. */
+(function () {
+  var pin = document.getElementById('pin-cta'); if (!pin) return;
+  var target = document.querySelector(pin.getAttribute('href'));
+  var buttons = [].slice.call(document.querySelectorAll('.h-cta, .end-cta'));
+  var first = document.querySelector('.h-cta'), form = document.getElementById('app-form');
+  function onScreen(el, pad) { var r = el.getBoundingClientRect(); return r.bottom > pad && r.top < window.innerHeight - pad; }
+  function update() {
+    var show = !!first && first.getBoundingClientRect().bottom < 0           // scrolled past the first button
+      && !buttons.some(function (b) { return onScreen(b, 0); })               // no other button to the form in view
+      && !(target && onScreen(target, 90))                                    // not on the form already
+      && !!form && !form.hidden;                                              // the form can still be filled in
+    pin.classList.toggle('show', show);
+    pin.setAttribute('aria-hidden', show ? 'false' : 'true'); pin.tabIndex = show ? 0 : -1;
+  }
+  window.addEventListener('scroll', update, { passive: true }); window.addEventListener('resize', update); window.addEventListener('load', update);
+  if (form && window.MutationObserver) new MutationObserver(update).observe(form, { attributes: true, attributeFilter: ['hidden'] });
+  update();
 })();
 </script>
 <script data-goatcounter="https://unwakingart.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
