@@ -14,7 +14,7 @@
 <meta property="og:url" content="https://unwakingart.github.io/workshops/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="description" content="Paint your first oil portrait in a three-hour beginner workshop in Makati, in November 2026. All materials provided, no experience needed.">
-<link rel="stylesheet" href="brand/site.css?v=20261009083332">
+<link rel="stylesheet" href="brand/site.css?v=20261009083631">
 <style>
   /* Additions for the workshop page; everything else comes from brand/site.css (the Hanoi cohort page's look). */
   .h-print img { aspect-ratio: 4 / 5; object-position: 30% 30%; }
@@ -55,10 +55,13 @@
   /* A pinned button on phones and tablets: it shows while no other button to the form, and not the form itself, is on screen. */
   .pin-cta { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 40; transform: translate(-50%, 16px); opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; white-space: nowrap; text-decoration: none; font-size: 12.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; padding: 12px 28px; border-radius: 40px; background: #5C682E; color: #F3EAD3; border: 1px solid #4A3728; box-shadow: 3px 3px 0 #4A3728, 0 8px 18px rgba(60,40,20,0.28); }
   .pin-cta.show { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
+  .pin-cta.snap { transition: none; }
+  @keyframes pin-land { 0% { transform: scale(1.06); box-shadow: 3px 3px 0 #4A3728, 0 8px 18px rgba(60,40,20,0.28); } 55% { transform: scale(0.985); } 100% { transform: scale(1); box-shadow: 3px 3px 0 #4A3728, 0 0 0 rgba(60,40,20,0); } }
+  .end .end-cta.landed { animation: pin-land 0.42s ease-out; }
   @media (min-width: 900px) { .pin-cta { display: none; } }
   @media (prefers-reduced-motion: reduce) { .pin-cta { transition: none; } }
 </style>
-<script>(function(){var v="20261009083332";function c(){fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})}c();document.addEventListener("visibilitychange",function(){if(!document.hidden)c()});window.addEventListener("pageshow",function(e){if(e.persisted)c()})})();</script>
+<script>(function(){var v="20261009083631";function c(){fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})}c();document.addEventListener("visibilitychange",function(){if(!document.hidden)c()});window.addEventListener("pageshow",function(e){if(e.persisted)c()})})();</script>
 </head>
 <body>
 
@@ -540,22 +543,45 @@ Here's my payment receipt.</div>
 })();
 </script>
 <script>
-/* The pinned button: hidden at the top (the first button is there), while the form is on screen, near the closing button, and once the form is sent or closed. */
+/* The pinned button (phones and tablets). It is hidden at the top, where the first button is, and while the form is on screen.
+   At the end of the page it lands on the closing button: the closing button stays unseen until it scrolls up into the pinned
+   button's spot, then takes over with a small settle, so it reads as one button coming to rest where it belongs. */
 (function () {
   var pin = document.getElementById('pin-cta'); if (!pin) return;
   var target = document.querySelector(pin.getAttribute('href'));
-  var buttons = [].slice.call(document.querySelectorAll('.h-cta, .end-cta'));
-  var first = document.querySelector('.h-cta'), form = document.getElementById('app-form');
+  var first = document.querySelector('.h-cta'), last = document.querySelector('.end-cta'), form = document.getElementById('app-form');
+  var wasDocked = null, calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function onScreen(el, pad) { var r = el.getBoundingClientRect(); return r.bottom > pad && r.top < window.innerHeight - pad; }
+  function match() {   // same size and lettering as the closing button, so the hand-over is exact
+    if (!last) return;
+    var cs = getComputedStyle(last);
+    ['fontSize', 'fontWeight', 'letterSpacing', 'lineHeight', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'borderRadius'].forEach(function (k) { pin.style[k] = cs[k]; });
+  }
   function update() {
-    var show = !!first && first.getBoundingClientRect().bottom < 0           // scrolled past the first button
-      && !buttons.some(function (b) { return onScreen(b, 0); })               // no other button to the form in view
-      && !(target && onScreen(target, 90))                                    // not on the form already
-      && !!form && !form.hidden;                                              // the form can still be filled in
+    var active = getComputedStyle(pin).display !== 'none';
+    var usable = !!form && !form.hidden;
+    var base = usable
+      && !!first && first.getBoundingClientRect().bottom < 0                  // scrolled past the first button
+      && !(target && onScreen(target, 90));                                    // not on the form already
+    var docked = false;
+    if (last) {
+      var slotTop = window.innerHeight - (parseFloat(getComputedStyle(pin).bottom) || 0) - pin.offsetHeight;
+      var top = last.getBoundingClientRect().top;
+      docked = top <= slotTop;                                                 // the closing button has reached the pinned spot
+      var handing = active && base;                                            // only when the pinned button is the one arriving
+      last.style.visibility = handing && !docked && top < window.innerHeight ? 'hidden' : '';
+      if (handing && wasDocked === false && docked && !calm) { last.classList.remove('landed'); void last.offsetWidth; last.classList.add('landed'); }
+      if (wasDocked !== null && wasDocked !== docked) { pin.classList.add('snap'); setTimeout(function () { pin.classList.remove('snap'); }, 60); }
+      wasDocked = docked;
+    }
+    var show = base && !docked;
     pin.classList.toggle('show', show);
     pin.setAttribute('aria-hidden', show ? 'false' : 'true'); pin.tabIndex = show ? 0 : -1;
   }
-  window.addEventListener('scroll', update, { passive: true }); window.addEventListener('resize', update); window.addEventListener('load', update);
+  match();
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', function () { match(); update(); }); window.addEventListener('load', function () { match(); update(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { match(); update(); });
   if (form && window.MutationObserver) new MutationObserver(update).observe(form, { attributes: true, attributeFilter: ['hidden'] });
   update();
 })();
