@@ -14,7 +14,7 @@
 <meta property="og:url" content="https://unwakingart.github.io/workshops/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="description" content="Paint your first oil portrait in a three-hour beginner workshop in Makati, in November 2026. All materials provided, no experience needed.">
-<link rel="stylesheet" href="brand/site.css?v=20261009084202">
+<link rel="stylesheet" href="brand/site.css?v=20261009084505">
 <style>
   /* Additions for the workshop page; everything else comes from brand/site.css (the Hanoi cohort page's look). */
   .h-print img { aspect-ratio: 4 / 5; object-position: 30% 30%; }
@@ -63,8 +63,19 @@
   .end .end-cta.landed { animation: pin-land 0.42s ease-out; }
   @media (min-width: 900px) { .pin-cta { display: none; } }
   @media (prefers-reduced-motion: reduce) { .pin-cta { transition: none; } }
+  /* A slim menu pinned to the top on phones and tablets. It appears once the page menu has scrolled away, and hides on the form. */
+  .pin-nav { position: fixed; left: 0; right: 0; top: 0; z-index: 39; background: rgba(253,248,240,0.96); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); transform: translateY(-100%); opacity: 0; pointer-events: none; transition: transform 0.25s ease, opacity 0.25s ease; }
+  .pin-nav::after { content: ""; display: block; height: 1px; background: linear-gradient(to right, transparent, #C4AD8D, transparent); }
+  .pin-nav.show { transform: none; opacity: 1; pointer-events: auto; }
+  .pin-nav-in { display: flex; gap: 6px; overflow-x: auto; white-space: nowrap; padding: 8px 14px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .pin-nav-in::-webkit-scrollbar { display: none; }
+  .pin-nav a { flex: none; background: #4A3728; color: #FDF8F0; border: 1px solid #4A3728; text-decoration: none; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 10px; }
+  .pin-nav a.on { background: #5C682E; color: #F3EAD3; border-color: #5C682E; }
+  @media (max-width: 899px) { section[id] { scroll-margin-top: 52px; } }
+  @media (min-width: 900px) { .pin-nav { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .pin-nav { transition: none; } }
 </style>
-<script>(function(){var v="20261009084202";function c(){fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})}c();document.addEventListener("visibilitychange",function(){if(!document.hidden)c()});window.addEventListener("pageshow",function(e){if(e.persisted)c()})})();</script>
+<script>(function(){var v="20261009084505";function c(){fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})}c();document.addEventListener("visibilitychange",function(){if(!document.hidden)c()});window.addEventListener("pageshow",function(e){if(e.persisted)c()})})();</script>
 </head>
 <body>
 
@@ -290,6 +301,8 @@ Here's my payment receipt.</div>
   </section>
 
 </main>
+
+<nav class="pin-nav" id="pin-nav" aria-label="Sections" aria-hidden="true"><div class="pin-nav-in" id="pin-nav-in"></div></nav>
 
 <a class="pin-cta" id="pin-cta" href="#register" aria-hidden="true" tabindex="-1" data-goatcounter-click="register-pinned" data-goatcounter-title="Register now (pinned)">Register now</a>
 
@@ -596,6 +609,35 @@ Here's my payment receipt.</div>
   window.addEventListener('resize', function () { match(); update(); }); window.addEventListener('load', function () { match(); update(); });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { match(); update(); });
   if (form && window.MutationObserver) new MutationObserver(update).observe(form, { attributes: true, attributeFilter: ['hidden'] });
+  update();
+})();
+</script>
+<script>
+/* The pinned menu (phones and tablets): a copy of the page menu. Shown once the page menu has scrolled away, hidden on the form. */
+(function () {
+  var nav = document.getElementById('pin-nav'), box = document.getElementById('pin-nav-in'), menu = document.querySelector('.hero2 .menu');
+  if (!nav || !box || !menu) return;
+  var form = document.querySelector('#apply, #register');
+  var links = [].slice.call(menu.querySelectorAll('a')).map(function (a) {
+    var c = document.createElement('a'); c.href = a.getAttribute('href'); c.textContent = a.textContent; c.tabIndex = -1; box.appendChild(c); return c;
+  });
+  var secs = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var lastOn = -1;
+  function update() {
+    var onForm = false;
+    if (form) { var r = form.getBoundingClientRect(); onForm = r.bottom > 90 && r.top < window.innerHeight - 90; }
+    var show = menu.getBoundingClientRect().bottom < 0 && !onForm;
+    nav.classList.toggle('show', show); nav.setAttribute('aria-hidden', show ? 'false' : 'true');
+    var cur = 0;
+    for (var i = 0; i < secs.length; i++) { if (secs[i] && secs[i].getBoundingClientRect().top <= 160) cur = i; }
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) cur = secs.length - 1;
+    links.forEach(function (a, i) { a.classList.toggle('on', i === cur); a.tabIndex = show ? 0 : -1; });
+    if (cur !== lastOn) {   // keep the current section's button in view in the row
+      lastOn = cur; var a = links[cur];
+      box.scrollLeft = Math.max(0, a.offsetLeft - (box.clientWidth - a.offsetWidth) / 2);
+    }
+  }
+  window.addEventListener('scroll', update, { passive: true }); window.addEventListener('resize', update); window.addEventListener('load', update);
   update();
 })();
 </script>
