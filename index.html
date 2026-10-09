@@ -14,7 +14,7 @@
 <meta property="og:url" content="https://unwakingart.github.io/workshops/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="description" content="Paint your first oil portrait in a three-hour beginner workshop in Makati, in November 2026. All materials provided, no experience needed.">
-<link rel="stylesheet" href="brand/site.css?v=20261009075309">
+<link rel="stylesheet" href="brand/site.css?v=20261009082836">
 <style>
   /* Additions for the workshop page; everything else comes from brand/site.css (the Hanoi cohort page's look). */
   .h-print img { aspect-ratio: 4 / 5; object-position: 30% 30%; }
@@ -53,7 +53,7 @@
   .app-closed { text-align: center; padding: 10px 0 4px; }
   .app-closed h3 { font-size: 18px; margin-bottom: 6px; }
 </style>
-<script>(function(){var v="20261009075309";function c(){fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})}c();document.addEventListener("visibilitychange",function(){if(!document.hidden)c()});window.addEventListener("pageshow",function(e){if(e.persisted)c()})})();</script>
+<script>(function(){var v="20261009082836";function c(){fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})}c();document.addEventListener("visibilitychange",function(){if(!document.hidden)c()});window.addEventListener("pageshow",function(e){if(e.persisted)c()})})();</script>
 </head>
 <body>
 
@@ -279,6 +279,22 @@ Here's my payment receipt.</div>
   </section>
 
 </main>
+
+<script>
+/* The picture and its note are placed by hand, so their area has no natural height. Fit it to them, so no empty gap is left below. */
+(function () {
+  var stage = document.querySelector('.h-stage'); if (!stage) return;
+  function fit() {
+    var bottom = 0;
+    [].forEach.call(stage.children, function (c) { bottom = Math.max(bottom, c.offsetTop + c.offsetHeight); });
+    if (bottom) { stage.style.minHeight = '0'; stage.style.height = (bottom + 22) + 'px'; }
+  }
+  fit();
+  window.addEventListener('resize', fit); window.addEventListener('load', fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  [].forEach.call(stage.querySelectorAll('img'), function (i) { i.addEventListener('load', fit); });
+})();
+</script>
 
 <script>
 /* Menu: mark the section in view */
