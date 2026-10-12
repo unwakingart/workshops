@@ -796,7 +796,7 @@
   .app-msg { margin: 10px 0 0; font-size: 13.5px; color: #8A3B2A; min-height: 1em; }
   .app-done h3 { font-size: 18px; margin-bottom: 6px; }
   .app-done p { margin: 0; }
-  @media (min-width: 700px) { .glance.app { padding: 34px 40px 30px; } .app-row { grid-template-columns: 1fr 1fr; } .app-row.app-row-3 { grid-template-columns: calc(50% - 8px) 96px 1fr; } .app-row .app-short { max-width: 140px; } }
+  @media (min-width: 700px) { .glance.app { padding: 34px 40px 30px; } .app-row { grid-template-columns: 1fr 1fr; } .app-row .app-short { max-width: 140px; } }
   .h-plus { font-size: 10px; line-height: 1; color: #4A3728; margin: 5px 0 0; }
   .hero2 h1 { margin-top: 5px; }
 
