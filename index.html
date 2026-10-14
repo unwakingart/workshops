@@ -16,7 +16,27 @@
 <meta name="description" content="Paint your first oil portrait in a three-hour beginner oil painting workshop at Kind Cookie Cafe, Salcedo Village, Makati. Nov 28, 2026. All materials provided, no experience needed. ₱2,000 early bird.">
 <!-- Search engines read these. Keep them in step with the WORKSHOPS list: one entry per date that can still be booked. -->
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "EducationEvent", "name": "Beginner Oil Painting Portrait Workshop", "description": "A three-hour beginner oil painting workshop. Paint an oil portrait with four colors. All materials provided, no experience needed.", "startDate": "2026-11-28T11:30:00+08:00", "endDate": "2026-11-28T14:30:00+08:00", "eventStatus": "https://schema.org/EventScheduled", "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode", "location": {"@type": "Place", "name": "Kind Cookie Cafe", "address": {"@type": "PostalAddress", "addressLocality": "Makati", "addressRegion": "Metro Manila", "addressCountry": "PH", "streetAddress": "Salcedo Village"}}, "image": ["https://unwakingart.github.io/workshops/images/preview.png"], "organizer": {"@type": "Organization", "name": "unwakingart", "url": "https://unwakingart.github.io/", "sameAs": ["https://www.instagram.com/unwakingart/"]}, "offers": {"@type": "Offer", "url": "https://unwakingart.github.io/workshops/", "price": "2000", "priceCurrency": "PHP", "availability": "https://schema.org/InStock", "validFrom": "2026-10-09"}}</script>
-<link rel="stylesheet" href="brand/site.css?v=20261014081538">
+<link rel="stylesheet" href="brand/site.css?v=20261014190534">
+<style>
+  /* The shared stylesheet's olive greens in the rust of the Yoad portrait posts (Michelle, 2026-10-14); the Hanoi page keeps its own colors */
+  .nb-month { font-size: 22px; line-height: 1.2; color: #4A3728; margin: 0 0 6px; display: inline; background: linear-gradient(transparent 60%, rgba(138,63,34,0.6) 60%); padding: 0 4px; }
+  .ann { background: #6A2E17; color: #F3EAD3; }
+  .menu a.on { background: #8A3F22; color: #F3EAD3; border-color: #8A3F22; }
+  .h-belief mark { background: linear-gradient(transparent 60%, rgba(138,63,34,0.6) 60%); color: inherit; padding: 0 3px; }
+  .app input:focus, .app textarea:focus { outline: 2px solid #8A3F22; outline-offset: 1px; }
+  .app-head span { background: linear-gradient(transparent 60%, rgba(138,63,34,0.6) 60%); padding: 0 4px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  .app-sticky { position: absolute; z-index: 0; right: 14px; top: 22px; padding: 6px 10px 7px; font-size: 9px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #EBD3C0; transform: rotate(3deg); text-align: center; }
+  .app input:focus, .app textarea:focus { outline: 0; background-color: rgba(138,63,34,0.16); }
+  .app .app-pick:has(input:checked) { background: rgba(138,63,34,0.6); }
+  .app .app-send { background: #8A3F22; color: #F3EAD3; border: 1px solid #4A3728; box-shadow: 3px 3px 0 #4A3728; }
+  .app .app-send:hover { background: #6A2E17; }
+  .end-line mark { background: linear-gradient(transparent 60%, rgba(138,63,34,0.6) 60%); color: inherit; padding: 0 5px; }
+  .end .end-cta { background: #8A3F22; color: #F3EAD3; border: 1px solid #4A3728; box-shadow: 3px 3px 0 #4A3728; margin-top: 22px; }
+  .end .end-cta:hover { background: #6A2E17; }
+  .note.two::after, .app-sticky::after { background: #7A3519 url(cream-paper.jpg) center / 520px auto; background-blend-mode: multiply; }
+  .note.two .g-rows dt, .note.two .g-head, .note.two .g-not li { color: #EBD3C0; }
+</style>
+
 <style>
   /* Additions for the workshop page; everything else comes from brand/site.css (the Hanoi cohort page's look). */
   .h-print img { aspect-ratio: 4 / 5; object-position: 30% 30%; }
@@ -33,7 +53,7 @@
   .date-filter { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin: 0 0 30px; }
   .date-filter button { font: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 12px; cursor: pointer; background: #4A3728; color: #FDF8F0; border: 1px solid #4A3728; border-radius: 0; }
   .date-filter button:hover { background: #6B4A2E; }
-  .date-filter button.on { background: #5C682E; color: #F3EAD3; border-color: #5C682E; }
+  .date-filter button.on { background: #8A3F22; color: #F3EAD3; border-color: #8A3F22; }
   .date-empty { text-align: center; margin: 0; }
   .seat-full { color: #8A3B2A; font-weight: 600; }
   .note.two .seat-full { color: #F3EAD3; }
@@ -63,7 +83,7 @@
   .app-closed { text-align: center; padding: 10px 0 4px; }
   .app-closed h3 { font-size: 18px; margin-bottom: 6px; }
   /* A pinned button on phones and tablets: it shows while no other button to the form, and not the form itself, is on screen. */
-  .pin-cta { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 40; transform: translate(-50%, 16px); opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; white-space: nowrap; text-decoration: none; font-size: 12.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; padding: 12px 28px; border-radius: 40px; background: #5C682E; color: #F3EAD3; border: 1px solid #4A3728; box-shadow: 3px 3px 0 #4A3728, 0 8px 18px rgba(60,40,20,0.28); }
+  .pin-cta { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 40; transform: translate(-50%, 16px); opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; white-space: nowrap; text-decoration: none; font-size: 12.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; padding: 12px 28px; border-radius: 40px; background: #8A3F22; color: #F3EAD3; border: 1px solid #4A3728; box-shadow: 3px 3px 0 #4A3728, 0 8px 18px rgba(60,40,20,0.28); }
   .pin-cta.show { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
   .pin-cta.snap { transition: none; }
   @keyframes pin-land { 0% { transform: scale(1.06); box-shadow: 3px 3px 0 #4A3728, 0 8px 18px rgba(60,40,20,0.28); } 55% { transform: scale(0.985); } 100% { transform: scale(1); box-shadow: 3px 3px 0 #4A3728, 0 0 0 rgba(60,40,20,0); } }
@@ -77,12 +97,12 @@
   .pin-nav-in { display: flex; gap: 6px; overflow-x: auto; white-space: nowrap; padding: 8px 14px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .pin-nav-in::-webkit-scrollbar { display: none; }
   .pin-nav a { flex: none; background: #4A3728; color: #FDF8F0; border: 1px solid #4A3728; text-decoration: none; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 10px; }
-  .pin-nav a.on { background: #5C682E; color: #F3EAD3; border-color: #5C682E; }
+  .pin-nav a.on { background: #8A3F22; color: #F3EAD3; border-color: #8A3F22; }
   @media (max-width: 899px) { section[id] { scroll-margin-top: 52px; } }
   @media (min-width: 900px) { .pin-nav { display: none; } }
   @media (prefers-reduced-motion: reduce) { .pin-nav { transition: none; } }
 </style>
-<script>(function(){var v="20261014081538";function c(){fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})}c();document.addEventListener("visibilitychange",function(){if(!document.hidden)c()});window.addEventListener("pageshow",function(e){if(e.persisted)c()})})();</script>
+<script>(function(){var v="20261014190534";function c(){fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){t=t.trim();if(/^\d+$/.test(t)&&t!==v&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t+location.hash)}}).catch(function(){})}c();document.addEventListener("visibilitychange",function(){if(!document.hidden)c()});window.addEventListener("pageshow",function(e){if(e.persisted)c()})})();</script>
 </head>
 <body>
 
@@ -105,13 +125,13 @@
         <p class="lede">A small beginner workshop at a café in Makati. You learn to see the portrait in values, mix every color from four paints and build it in layers, from shadow to highlight. Then you take your portrait home.</p>
       </div>
       <div class="h-stage">
-        <div class="h-print"><img src="images/fabiola.jpg" alt="A painted portrait of a young woman in profile, wearing a red veil against a dark background"></div>
+        <div class="h-print"><img src="images/portrait-006.jpg" alt="A painted study of a young woman looking to the side, on a black ground"></div>
         <div class="h-note"><p class="h-note-title">[ Oil Painting Portrait ]</p>
           <dl><dt>Dates</dt><dd id="hero-dates">Nov 28, 2026</dd><dt>Time</dt><dd>11:30am to 2:30pm</dd><dt>Location</dt><dd>Makati</dd><dt>Fee</dt><dd>₱2,000 early bird<br>₱2,200 regular<br>₱2,400 walk-in</dd><dt>Seats</dt><dd><span data-seats-range>6 to 7</span> each day</dd></dl>
         </div>
       </div>
     </div>
-    <p class="h-credit">The portrait we paint: after Jean-Jacques Henner, <em>Fabiola</em>, 1885.</p>
+    <p class="h-credit">The portrait we paint: a painted study after a photo by Yoad Shejtman.</p>
   </section>
 
   <div class="divider"></div>
