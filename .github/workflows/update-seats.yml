@@ -1,0 +1,62 @@
+# Update seats: set how many seats are left for one workshop date, from the GitHub app on a phone.
+# Actions → Update seats → Run workflow → pick the date, type the seats left (0 shows the date as full) → Run.
+# The page reads seats.json every time it loads, so the change shows about a minute after the run.
+# When a new workshop date is added (a line in WORKSHOPS in index.html and in seats.json), add it to the options below too.
+name: Update seats
+
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: Workshop date
+        type: choice
+        options:
+          - "2026-11-28"
+          - "2026-11-07"
+          - "2026-11-08"
+      seats:
+        description: Seats left (0 = full)
+        type: number
+        required: true
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set the seats
+        env:
+          DATE: ${{ inputs.date }}
+          SEATS: ${{ inputs.seats }}
+        run: |
+          python3 - <<'PY'
+          import json, os, sys
+          date, seats = os.environ["DATE"], os.environ["SEATS"]
+          if not seats.isdigit() or int(seats) > 20:
+              sys.exit(f"Seats must be a whole number from 0 to 20, not {seats!r}.")
+          with open("seats.json") as f:
+              data = json.load(f)
+          if date not in data:
+              sys.exit(f"{date} is not in seats.json. Add the date to the page first.")
+          old = data[date]
+          data[date] = int(seats)
+          with open("seats.json", "w") as f:
+              f.write("{ " + ", ".join(f'"{k}": {v}' for k, v in data.items()) + " }\n")
+          print(f"{date}: {old} -> {seats} seats left")
+          PY
+      - name: Save and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DATE: ${{ inputs.date }}
+          SEATS: ${{ inputs.seats }}
+        run: |
+          if git diff --quiet seats.json; then echo "No change: $DATE already has $SEATS seats left."; exit 0; fi
+          git config user.name "unwakingart seats"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Seats: $DATE has $SEATS left"
+          git push
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" --silent || echo "Pages will rebuild on its own."
