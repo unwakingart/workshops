@@ -1,5 +1,7 @@
 # Update seats: set how many seats are left for one workshop date, from the GitHub app on a phone.
 # Actions → Update seats → Run workflow → pick the date, type the seats left (0 shows the date as full) → Run.
+# A date ending in -pm is the afternoon session: it stays hidden on the page until it is given a number here, so pick it and
+# type 6 to open it once the morning is full (Michelle, 2026-10-15: "I will only open a second session when the first session is full").
 # The page reads seats.json every time it loads, so the change shows about a minute after the run.
 # When a new workshop date is added (a line in WORKSHOPS in index.html and in seats.json), add it to the options below too.
 name: Update seats
@@ -8,18 +10,19 @@ on:
   workflow_dispatch:
     inputs:
       date:
-        description: Workshop date
+        description: Workshop date (-pm = the afternoon session)
         type: choice
         options:
           - "2026-11-28"
+          - "2026-11-28-pm"
+          - "2026-12-12"
+          - "2026-12-12-pm"
+          - "2027-01-23"
+          - "2027-01-23-pm"
+          - "2027-02-20"
+          - "2027-02-20-pm"
           - "2026-11-07"
           - "2026-11-08"
-          - "2026-12-12"
-          - "2026-12-13"
-          - "2027-01-23"
-          - "2027-01-24"
-          - "2027-02-20"
-          - "2027-02-21"
       seats:
         description: Seats left (0 = full)
         type: number
@@ -46,9 +49,9 @@ jobs:
               sys.exit(f"Seats must be a whole number from 0 to 20, not {seats!r}.")
           with open("seats.json") as f:
               data = json.load(f)
-          if date not in data:
+          if date not in data and not date.endswith("-pm"):
               sys.exit(f"{date} is not in seats.json. Add the date to the page first.")
-          old = data[date]
+          old = data.get(date, "closed")   # an afternoon session opens the first time it is given a number
           data[date] = int(seats)
           with open("seats.json", "w") as f:
               f.write("{ " + ", ".join(f'"{k}": {v}' for k, v in data.items()) + " }\n")
