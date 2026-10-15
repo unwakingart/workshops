@@ -1,4 +1,4 @@
-/* Shared look for unwakingart public pages. Copied from the live Hanoi cohort page (retreats/hanoi-landing-page.html) on 2026-10-09. */
+/* Shared look for unwakingart public pages. Copied from the live Hanoi intensive page (retreats/hanoi-landing-page.html) on 2026-10-09. */
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -611,7 +611,7 @@
   }
   .opening h1 { font-size: 11px; color: #4A3728; }
 
-  /* ---------- The cohort at a glance: one compact card ---------- */
+  /* ---------- The intensive at a glance: one compact card ---------- */
   .glance { max-width: 620px; margin: 6px auto 0; background: #F5EFE6; border: 1px solid #4A3728; padding: 26px 26px 24px; text-align: left; }
   .g-title { font-size: 12px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #4A3728; margin: 0 0 16px; }
   .g-rows { display: grid; grid-template-columns: minmax(120px, 0.8fr) 1.2fr; row-gap: 10px; column-gap: 16px; margin: 0; }
@@ -715,7 +715,7 @@
     .nb-intro, .nb-list li { font-size: 14.5px; }
   }
 
-  /* ---------- Cohort fee: two torn paper notes, both in view ---------- */
+  /* ---------- Fee: two torn paper notes, both in view ---------- */
   #tickets .g-wrap { max-width: 1000px; }
   #tickets .g-wrap > .g-title { margin-bottom: 30px; }
   .notes { display: grid; grid-template-columns: 1fr; gap: 40px 30px; }
